@@ -19,22 +19,23 @@ class Router extends XFCP_Router
      */
     public function routeToController($path, Request $request = null)
     {
-        $routePath = (string)substr($path, 0, -1);
-
-        $newThreadRoute = null;
-
         if ($path === '') {
             $path = 'index';
         }
 
         $parts = explode('/', $path, 2);
         $prefix = $parts[0];
+        $suffix = $parts[1] ?? null;
 
-        if (!isset($this->routes[$prefix]) || stripos($path, 'threads') !== false) {
+        $newThreadRoute = null;
+
+        if (!isset($this->routes[$prefix]) || $prefix === 'threads') {
             $newThreadRoute = $this->routes['threads'] ?? null;
             if ($newThreadRoute) {
-                $this->addRoute($routePath, 'post', $newThreadRoute['post']);
-                $this->addRoute($routePath, '', $newThreadRoute['']);
+                $routePath = (string)substr($path, 0, -1);
+                foreach ($newThreadRoute as $key => $route) {
+                    $this->addRoute($routePath, $key, $route);
+                }
             }
         }
 
@@ -43,8 +44,9 @@ class Router extends XFCP_Router
         $newMatch = $match;
 
         if ($newThreadRoute) {
+            $suffix = $prefix === 'threads' ? $suffix : $prefix;
             foreach ($newThreadRoute as $route) {
-                $newMatch = $this->suffixMatchesRoute($prefix, $route, $match, $request);
+                $newMatch = $this->suffixMatchesRoute($suffix, $route, $match, $request);
                 if ($newMatch) {
                     break;
                 }
@@ -63,9 +65,7 @@ class Router extends XFCP_Router
     {
         $routeUrl = parent::applyRouteFilterToUrl($prefix, $routeUrl);
 
-        if (stripos($routeUrl, 'threads') !== false) {
-            $routeUrl = str_replace('threads/', '', $routeUrl);
-        }
+        $routeUrl = preg_replace('/^threads\//', '', $routeUrl);
 
         return $routeUrl;
     }
