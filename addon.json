@@ -1,0 +1,16 @@
+{
+    "legacy_addon_id": "",
+    "title": "SM - Thread Route",
+    "description": "Вариант реализации аддона убирающего threads/ из url-адреса",
+    "version_id": 1000010,
+    "version_string": "1.0.0 Alpha",
+    "dev": "smadrome",
+    "dev_url": "https://github.com/smadrom/xenforo-thread-route",
+    "faq_url": "https://github.com/smadrom/xenforo-thread-route",
+    "support_url": "https://github.com/smadrom/xenforo-thread-route",
+    "extra_urls": [],
+    "require": {
+        "php": ["7.0.0", "PHP 7.0.0+"]
+    },
+    "icon": "fa-bullhorn"
+}
