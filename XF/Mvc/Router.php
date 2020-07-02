@@ -44,7 +44,7 @@ class Router extends XFCP_Router
         $newMatch = $match;
 
         if ($newThreadRoute) {
-            $suffix = $prefix === 'threads' ? $suffix : $prefix;
+            $suffix = $prefix === 'threads' ? $suffix : $prefix . '/' . $suffix;
             foreach ($newThreadRoute as $route) {
                 $newMatch = $this->suffixMatchesRoute($suffix, $route, $match, $request);
                 if ($newMatch) {
